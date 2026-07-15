@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Iniciamos la aplicación Next.js en su modo standalone
+cd /app
+node server.js

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book: <%= filename %></title>
+    <style>
+      body { font-family: monospace; background:#000309; color:#e0ffe0; padding:2rem; }
+      h1 { color:#00ff88; }
+      pre {
+        background:#020b06;
+        padding:0.7rem;
+        border-radius:6px;
+        border:1px solid #044;
+        white-space:pre-wrap;
+        word-break:break-word;
+      }
+      a { color:#00ccff; }
+    </style>
+  </head>
+  <body>
+    <h1>Leyendo: <%= filename %></h1>
+
+    <pre><%= content %></pre>
+
+    <p><a href="/">← Volver a la biblioteca</a></p>
+  </body>
+</html>

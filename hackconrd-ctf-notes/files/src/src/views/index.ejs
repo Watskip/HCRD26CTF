@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HackConRD - EJS Note Service</title>
+    <style>
+      body { font-family: monospace; background:#050608; color:#e0e0e0; padding:2rem; }
+      h1 { color:#00ff88; }
+      a { color:#00ccff; }
+      .box { border:1px solid #333; padding:1rem; border-radius:6px; background:#0b0e13; }
+      code, pre { background:#11141c; padding:0.5rem; border-radius:4px; display:inline-block; }
+    </style>
+  </head>
+  <body>
+    <h1>HackConRD - Wastkip 90001™</h1>
+
+    <div class="box">
+      <p>Bienvenido agente. Este servicio interno muestra notas guardadas en el servidor.</p>
+      <p>Solo hace render de texto seguro, ¿qué podría salir mal?</p>
+    </div>
+
+    <h2>Notas</h2>
+    <p>Las notas se ven en la ruta:</p>
+    <pre>/note?title=Mi+nota&content=Texto+de+prueba</pre>
+
+    <p>Ejemplo rápido:</p>
+    <p>
+      <a href="/note?title=Mi+primera+nota&content=Texto+inofensivo...">
+        Ver nota de ejemplo →
+      </a>
+    </p>
+  </body>
+</html>

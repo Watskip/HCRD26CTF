@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackConRD Web Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #222; 
+            color: #fff; 
+            font-family: 'Press Start 2P', cursive; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            user-select: none; 
+            overflow: hidden;
+        }
+        h2 { color: #f1c40f; text-shadow: 3px 3px #d35400; font-size: 24px; margin-bottom: 10px;}
+        
+        #game-wrapper { 
+            position: relative; 
+            border: 6px solid #ecf0f1; 
+            border-radius: 8px; 
+            background: #78a252; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+        }
+        
+        canvas { display: block; image-rendering: pixelated; }
+        
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        
+        .panel { 
+            background: rgba(0, 0, 0, 0.85); 
+            border: 2px solid #fff; 
+            padding: 15px; 
+            pointer-events: auto; 
+            font-size: 10px; 
+            line-height: 1.8; 
+            border-radius: 4px;
+        }
+        
+        #stats-panel { position: absolute; top: 15px; left: 15px; color: #fff; }
+        .money-text { color: #2ecc71; font-size: 12px; }
+        
+        #chat-panel { position: absolute; bottom: 15px; left: 15px; width: 320px; height: 120px; display: flex; flex-direction: column; }
+        #chat-messages { flex-grow: 1; overflow-y: auto; margin-bottom: 8px; font-size: 9px; line-height: 1.4; }
+        #chat-input { width: 100%; background: #111; color: #2ecc71; border: 1px solid #7f8c8d; font-family: 'Press Start 2P', cursive; font-size: 8px; padding: 6px; box-sizing: border-box;}
+        
+        #shop-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; width: 450px; text-align: center; color: #fff; z-index: 50;}
+        .shop-item { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; border-bottom: 2px dashed #555; padding-bottom: 10px; }
+        .shop-item input { width: 60px; background: #222; color: #f1c40f; border: 2px solid #fff; font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 5px; text-align: center;}
+        
+        button { background: #e74c3c; color: #fff; border: 2px solid #c0392b; font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 10px 15px; cursor: pointer; border-radius: 4px;}
+        button:active { background: #c0392b; transform: scale(0.95); }
+        
+        #login-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; pointer-events: auto; }
+        #login-screen h1 { color: #f1c40f; text-shadow: 4px 4px #d35400; font-size: 36px; text-align: center; margin-bottom: 20px;}
+        #login-screen input { font-family: 'Press Start 2P', cursive; font-size: 16px; padding: 15px; text-align: center; margin: 30px 0; border: 4px solid #34495e; background: #ecf0f1; color: #2c3e50; width: 300px;}
+        
+        /* Botones Virtuales Visuales para el Usuario */
+        #virtual-controls { display: flex; justify-content: space-between; align-items: center; width: 800px; margin-top: 15px; }
+        
+        .d-pad { display: grid; grid-template-columns: 60px 60px 60px; grid-template-rows: 60px 60px 60px; gap: 8px; }
+        .btn { background: #bdc3c7; border: 4px solid #7f8c8d; border-radius: 8px; color: #2c3e50; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 #95a5a6;}
+        .btn:active { background: #95a5a6; transform: translateY(4px); box-shadow: 0 0 0 #7f8c8d;}
+        
+        #btn-up { grid-column: 2; grid-row: 1; }
+        #btn-left { grid-column: 1; grid-row: 2; }
+        #btn-down { grid-column: 2; grid-row: 2; }
+        #btn-right { grid-column: 3; grid-row: 2; }
+        
+        .action-buttons { display: flex; gap: 20px; align-items: center;}
+        .action-btn { width: 80px; height: 80px; border-radius: 50%; background: #e74c3c; border: 6px solid #c0392b; color: #fff; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; box-shadow: 0 6px 0 #a93226; }
+        .action-btn:active { background: #c0392b; transform: translateY(6px); box-shadow: 0 0 0 #a93226; }
+        .btn-label {text-align: center; font-size: 10px; color: #bdc3c7; margin-top: 10px;}
+        
+        /* Ocultar barra de scroll en Webkit */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #222; }
+        ::-webkit-scrollbar-thumb { background: #555; }
+    </style>
+</head>
+<body>
+
+    <h2>HACKCON RD - CYPHER MARKET</h2>
+    
+    <div id="game-wrapper">
+        <div id="login-screen">
+            <h1>MERCADO<br>CYPHER</h1>
+            <p style="font-size: 12px; line-height: 2; color: #bdc3c7; text-align: center;">Servidor Multijugador.<br>Encuentra al mercader y obtén la flag.</p>
+            <input type="text" id="username-input" placeholder="Tu Apodo" maxlength="12">
+            <button id="join-btn" style="font-size: 16px; padding: 20px 40px;">INICIAR JUEGO</button>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="480"></canvas>
+        
+        <div id="ui-layer">
+            <div id="stats-panel" class="panel" style="display:none;">
+                JUGADOR: <span id="player-name" style="color: #3498db;">...</span><br><br>
+                DINERO: $<span id="player-money" class="money-text">0</span>
+            </div>
+            
+            <div id="chat-panel" class="panel" style="display:none;">
+                <div id="chat-messages"></div>
+                <input type="text" id="chat-input" placeholder="[Enter] para enviar chat...">
+            </div>
+            
+            <div id="shop-panel" class="panel">
+                <h3 style="color: #9b59b6; text-align: center;">VENDEDOR CYPHER</h3>
+                <p style="font-size: 8px; color: #7f8c8d; text-align: center; margin-bottom: 20px;">Todo tiene un precio en la red.</p>
+                <div id="shop-items"></div>
+                <button onclick="closeShop()" style="margin-top:20px; width: 100%; background: #34495e; border-color: #2c3e50;">SALIR DE LA TIENDA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controles en Pantalla -->
+    <div id="virtual-controls" style="display:none;">
+        <div class="d-pad">
+            <div class="btn" id="btn-up">W</div>
+            <div class="btn" id="btn-left">A</div>
+            <div class="btn" id="btn-down">S</div>
+            <div class="btn" id="btn-right">D</div>
+        </div>
+        
+        <div>
+            <div class="action-buttons">
+                <div>
+                    <div class="action-btn" id="btn-interact">E</div>
+                    <div class="btn-label">INTERACTUAR / ABRIR TIENDA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/game/game.js"></script>
+</body>
+</html>

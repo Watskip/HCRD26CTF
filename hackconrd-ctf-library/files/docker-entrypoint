@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Iniciamos la aplicación
+cd /app
+npm start

@@ -1,0 +1,9 @@
+# CTF Legacy Access
+services:
+
+  web:
+    build: .
+    image: legacy_access
+    restart: always
+    ports:
+      - "5006:5006"

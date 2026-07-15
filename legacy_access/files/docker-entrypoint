@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Iniciamos la aplicación
+python /files/src/app.py

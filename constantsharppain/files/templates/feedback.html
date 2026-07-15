@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback &mdash; CurePoint Pharmacy</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      background: #f0faf4;
+      color: #1e293b;
+    }
+
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #0f766e;
+    }
+
+    .nav-brand svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #0f766e;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-brand-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand-text span { color: #14b8a6; }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: #0f766e; }
+    .nav-links a.active { color: #0f766e; font-weight: 600; }
+
+    .page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .banner {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      border-radius: 16px;
+      padding: 2rem 2rem;
+      margin-top: 1.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .banner h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .banner p  { font-size: 0.88rem; opacity: 0.85; }
+
+    .feedback-card {
+      margin-top: 1.5rem;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      animation: fadeUp 0.3s ease;
+    }
+
+    .feedback-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.2rem;
+    }
+
+    .feedback-card > p {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 1.15rem;
+    }
+
+    .feedback-form { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .feedback-form textarea {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: #1e293b;
+      background: #f8fafc;
+      resize: vertical;
+      min-height: 110px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .feedback-form textarea:focus { border-color: #14b8a6; }
+    .feedback-form textarea::placeholder { color: #94a3b8; }
+
+    .feedback-form button {
+      align-self: flex-start;
+      background: #0f766e;
+      color: #fff;
+      border: none;
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .feedback-form button:hover { background: #0d6d64; }
+
+    .alert {
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      margin-bottom: 0.85rem;
+    }
+
+    .alert.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .info-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.1rem 1rem;
+      text-align: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .info-card:hover {
+      border-color: #99f6e4;
+      box-shadow: 0 2px 8px rgba(20, 184, 166, 0.08);
+    }
+
+    .info-card .ic-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .info-card .ic-title { font-size: 0.82rem; font-weight: 600; color: #1e293b; }
+    .info-card .ic-sub   { font-size: 0.72rem; color: #94a3b8; margin-top: 0.1rem; }
+
+    footer {
+      margin-top: 3rem;
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .info-cards { grid-template-columns: 1fr; }
+      .banner { padding: 1.5rem 1.25rem; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="{{ url_for('index') }}" class="nav-brand">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2v20M2 12h20"/>
+        <rect x="5" y="5" width="14" height="14" rx="3"/>
+      </svg>
+      <span class="nav-brand-text">Cure<span>Point</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Products</a></li>
+      <li><a href="{{ url_for('prescriptions') }}">Prescriptions</a></li>
+      <li><a href="{{ url_for('feedback') }}" class="active">Feedback</a></li>
+      <li><a href="/">Help</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <div class="banner">
+      <h1>Send Us Your Feedback</h1>
+      <p>Found a bug, have a suggestion, or need help? Let our admin team know.</p>
+    </div>
+
+    <div class="feedback-card">
+      <h3>Submit Feedback</h3>
+      <p>Your message will be reviewed by a site administrator. Please be as detailed as possible.</p>
+
+      {% if contact_status == "ok" %}
+      <div class="alert success">Your feedback has been submitted. An admin will review it shortly.</div>
+      {% elif contact_status == "invalid" %}
+      <div class="alert error">Please enter a message before submitting.</div>
+      {% endif %}
+
+      <form class="feedback-form" method="post" action="/contact">
+        <textarea name="comment" placeholder="Describe your issue, suggestion, or question..." required></textarea>
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="ic-icon">&#9201;</div>
+        <div class="ic-title">Fast Response</div>
+        <div class="ic-sub">Reviewed within minutes</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">&#128274;</div>
+        <div class="ic-title">Secure</div>
+        <div class="ic-sub">Messages are encrypted</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">&#128100;</div>
+        <div class="ic-title">Admin Review</div>
+        <div class="ic-sub">Personally checked by staff</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">&#128172;</div>
+        <div class="ic-title">Open Channel</div>
+        <div class="ic-sub">Any topic welcome</div>
+      </div>
+    </div>
+
+    <footer>&copy; 2026 CurePoint Pharmacy. All rights reserved.</footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+services:
+  intracorp-ctf-challenge1:
+    build: .
+    image: intracorp-ctf-challenge1
+    restart: always
+    ports:
+      - "6401:6401"

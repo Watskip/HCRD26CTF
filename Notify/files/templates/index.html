@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notify</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Notify</h1>
+      <p class="subtitle">Check if a website is up (HTTP 200).</p>
+
+      <form id="check-form">
+        <label for="url-input">Website URL</label>
+        <div class="row">
+          <input
+            id="url-input"
+            name="url"
+            type="url"
+            placeholder="https://example.com"
+            required
+          />
+          <button type="submit">Check</button>
+        </div>
+      </form>
+
+      <section id="result" class="result hidden">
+        <h2>Result</h2>
+        <p><strong>URL:</strong> <span id="result-url"></span></p>
+        <p><strong>Status:</strong> <span id="result-status"></span></p>
+        <p><strong>HTTP Response:</strong> <span id="result-http"></span></p>
+        <div id="xml-wrap" class="hidden">
+          <p><strong>Response:</strong></p>
+          <pre id="result-xml"></pre>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const form = document.getElementById("check-form");
+      const result = document.getElementById("result");
+      const resultUrl = document.getElementById("result-url");
+      const resultStatus = document.getElementById("result-status");
+      const resultHttp = document.getElementById("result-http");
+      const resultXml = document.getElementById("result-xml");
+      const xmlWrap = document.getElementById("xml-wrap");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const url = document.getElementById("url-input").value.trim();
+        if (!url) return;
+
+        result.classList.remove("hidden", "ok", "error");
+        resultStatus.textContent = "checking...";
+        resultUrl.textContent = url;
+        resultHttp.textContent = "-";
+        resultXml.textContent = "";
+        xmlWrap.classList.add("hidden");
+
+        try {
+          const response = await fetch(`/check?url=${encodeURIComponent(url)}`);
+          const contentType = response.headers.get("content-type") || "";
+
+          if (contentType.includes("application/xml")) {
+            const xml = await response.text();
+            resultStatus.textContent = "error";
+            resultHttp.textContent = "HTTP/500";
+            resultXml.textContent = xml;
+            xmlWrap.classList.remove("hidden");
+            result.classList.add("error");
+            return;
+          }
+
+          const data = await response.json();
+
+          resultUrl.textContent = data.url || url;
+          resultStatus.textContent = data.status || "error";
+          resultHttp.textContent = data.http_response || "HTTP/500";
+
+          if (response.ok && data.status === "up") {
+            result.classList.add("ok");
+          } else {
+            result.classList.add("error");
+          }
+        } catch (error) {
+          resultStatus.textContent = "error";
+          resultHttp.textContent = "HTTP/500";
+          result.classList.add("error");
+        }
+      });
+    </script>
+  </body>
+</html>

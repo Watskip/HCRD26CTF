@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CurePoint Pharmacy</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      background: #f0faf4;
+      color: #1e293b;
+    }
+
+    /* ── Top navigation bar ── */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #0f766e;
+    }
+
+    .nav-brand svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: #0f766e;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-brand-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand-text span {
+      color: #14b8a6;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: #0f766e; }
+    .nav-links a.active { color: #0f766e; font-weight: 600; }
+
+    /* ── Main layout ── */
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Hero / banner ── */
+    .banner {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      margin-top: 1.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .banner.compact {
+      padding: 1.25rem 2rem;
+      margin-top: 1rem;
+    }
+
+    .banner h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .banner.compact h1 { font-size: 1.15rem; }
+
+    .banner p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    /* ── Search bar ── */
+    .search-section {
+      margin-top: 1.5rem;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-bar:focus-within {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
+    }
+
+    .search-bar .s-icon {
+      display: flex;
+      align-items: center;
+      padding-left: 1rem;
+      color: #94a3b8;
+    }
+
+    .search-bar .s-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .search-bar input[type="text"] {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0.85rem 0.75rem;
+      font-size: 0.95rem;
+      color: #1e293b;
+      background: transparent;
+    }
+
+    .search-bar input[type="text"]::placeholder { color: #94a3b8; }
+
+    .search-bar button {
+      background: #0f766e;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      margin: 0.3rem 0.35rem;
+      border-radius: 9px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .search-bar button:hover { background: #0d6d64; }
+
+    /* ── Category pills ── */
+    .categories {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      color: #475569;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .pill:hover {
+      background: #f0fdfa;
+      border-color: #99f6e4;
+      color: #0f766e;
+    }
+
+    /* ── Results ── */
+    .results {
+      margin-top: 1.25rem;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .results-header {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+
+    .result-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.15rem 1.35rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .result-card p {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: #334155;
+    }
+
+    /* ── Empty / welcome state ── */
+    .welcome {
+      margin-top: 2rem;
+      text-align: center;
+      animation: fadeUp 0.35s ease;
+    }
+
+    .welcome-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      background: #ccfbf1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: #0f766e;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .welcome h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.3rem;
+    }
+
+    .welcome p {
+      font-size: 0.88rem;
+      color: #64748b;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ── Featured grid ── */
+    .featured {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .feat-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.15rem 1rem;
+      text-align: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .feat-card:hover {
+      border-color: #99f6e4;
+      box-shadow: 0 2px 8px rgba(20, 184, 166, 0.08);
+    }
+
+    .feat-card .fc-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feat-card .fc-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .feat-card .fc-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 0.15rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 3rem;
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .featured { grid-template-columns: 1fr 1fr; }
+      .banner { padding: 1.75rem 1.25rem; }
+      .banner h1 { font-size: 1.25rem; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="{{ url_for('index') }}" class="nav-brand">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2v20M2 12h20"/>
+        <rect x="5" y="5" width="14" height="14" rx="3"/>
+      </svg>
+      <span class="nav-brand-text">Cure<span>Point</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}" class="active">Products</a></li>
+      <li><a href="{{ url_for('prescriptions') }}">Prescriptions</a></li>
+      <li><a href="{{ url_for('feedback') }}">Feedback</a></li>
+      <li><a href="/">Help</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <!-- Banner -->
+    <div class="banner {% if q %}compact{% endif %}">
+      {% if q %}
+      <h1>Search Results</h1>
+      {% else %}
+      <h1>Your trusted online pharmacy</h1>
+      <p>Find medications, supplements, and wellness products &mdash; fast &amp; secure.</p>
+      {% endif %}
+    </div>
+
+    <!-- Search -->
+    <div class="search-section">
+      <form class="search-bar" method="get" action="/">
+        <span class="s-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="text" name="q" placeholder="Search medications, vitamins, first aid..." value="{{ q|e }}" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+      <div class="categories">
+        <a class="pill" href="/?q=Ibuprofen">Ibuprofen</a>
+        <a class="pill" href="/?q=Vitamin+D">Vitamin D</a>
+        <a class="pill" href="/?q=Amoxicillin">Amoxicillin</a>
+        <a class="pill" href="/?q=First+Aid">First Aid</a>
+        <a class="pill" href="/?q=Allergy">Allergy</a>
+      </div>
+    </div>
+
+    {% if q %}
+    <!-- Results -->
+    <div class="results">
+      <div class="results-header">Results</div>
+      <div class="result-card">
+        <p>{{ reflected_result|safe }}</p>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- Welcome / empty state -->
+    <div class="welcome">
+      <div class="welcome-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+      </div>
+      <h2>What are you looking for?</h2>
+      <p>Search above or browse our popular categories to find what you need.</p>
+    </div>
+
+    <div class="featured">
+      <div class="feat-card">
+        <div class="fc-icon">&#128138;</div>
+        <div class="fc-title">Pain Relief</div>
+        <div class="fc-sub">120+ products</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">&#129514;</div>
+        <div class="fc-title">Vitamins</div>
+        <div class="fc-sub">85+ products</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">&#129657;</div>
+        <div class="fc-title">First Aid</div>
+        <div class="fc-sub">60+ products</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <footer>&copy; 2026 CurePoint Pharmacy. All rights reserved.</footer>
+  </div>
+
+</body>
+</html>

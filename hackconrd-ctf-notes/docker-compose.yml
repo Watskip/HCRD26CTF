@@ -1,0 +1,14 @@
+# HackConRD 2026 — EJS Notes
+
+services:
+
+  web:
+    build: .
+    image: hackconrd-ejs-notes
+    restart: always
+    ports:
+      - "5015:5015"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL

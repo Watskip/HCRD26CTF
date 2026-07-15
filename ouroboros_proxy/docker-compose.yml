@@ -1,0 +1,13 @@
+# CTF Ouroboros Proxy
+version: "2"
+
+services:
+
+  web:
+    build: .
+    image: ouroboros_proxy
+    environment:
+      - FLAG=HCRD{RFC3986_byp4ss_m1x3d_w1th_L1nux_N3tw0rk_M4g1c}
+    restart: always
+    ports:
+      - "5005:80"

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HackConRD - TooNs Library</title>
+    <style>
+      body { font-family: monospace; background:#050608; color:#e0e0e0; padding:2rem; }
+      h1 { color:#00ff88; }
+      a { color:#00ccff; }
+      .box { border:1px solid #333; padding:1rem; border-radius:6px; background:#0b0e13; }
+      ul { list-style: none; padding: 0; }
+      li { margin: 0.3rem 0; }
+      code, pre { background:#11141c; padding:0.5rem; border-radius:4px; }
+    </style>
+  </head>
+  <body>
+    <h1>HackConRD - Internal Library</h1>
+
+    <div class="box">
+      <p>Bienvenido a la mini biblioteca interna. Aquí puedes leer documentos de texto almacenados en el servidor de ToonS.</p>
+      <p>Selecciona un conocimiento:</p>
+      <ul>
+        <% books.forEach(b => { %>
+          <li>
+            <a href="/book?file=<%= encodeURIComponent(b) %>"><%= b %></a>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <h2>Política del servicio</h2>
+    <pre>Solo archivos <code>.txt</code> bajo <code>library/</code>. El backend rechaza rutas absolutas y en caso de secuencias <code>../</code> las elimina del nombre solicitado antes de resolver la ruta.</pre>
+
+    <h2>Ejemplo</h2>
+    <pre>/book?file=lich.txt</pre>
+  </body>
+</html>

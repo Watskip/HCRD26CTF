@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Omega — Registro{% endblock %}
+{% block body %}
+<div class="omega-page">
+  <div class="omega-brand">
+    <div class="omega-logo">Ω</div>
+    <h1>Crear cuenta</h1>
+    <p>Registro en Omega</p>
+  </div>
+  <div class="omega-card">
+    {% if msg %}
+    <p class="alert {% if 'creada' in msg|lower %}alert-success{% else %}alert-error{% endif %}" role="alert">{{ msg }}</p>
+    {% endif %}
+    <form class="omega-form" method="POST">
+      <div class="omega-field">
+        <label for="username">Usuario</label>
+        <input id="username" type="text" name="username" required autocomplete="username">
+      </div>
+      <div class="omega-field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" name="password" required autocomplete="new-password">
+      </div>
+      <button type="submit">Crear cuenta</button>
+    </form>
+    <div class="omega-footer">
+      <a href="/login">Ya tengo cuenta — ir al login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

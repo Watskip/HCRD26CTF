@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  challenge4:
+    build: .
+    image: ctf-challenge4
+    restart: always
+    ports:
+      - "80:80"

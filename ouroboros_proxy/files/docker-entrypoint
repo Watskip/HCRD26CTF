@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Aquí se podría inyectar la flag si el reto lo requiere en un archivo estático
+# como hace el ejemplo de PHP, pero en Flask se lee de la variable de entorno.
+
+# Iniciamos la aplicación
+python /app/app.py

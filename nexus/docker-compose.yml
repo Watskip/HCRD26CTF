@@ -1,0 +1,7 @@
+services:
+  nexus:
+    build: .
+    container_name: nexus_container
+    ports:
+      - "4001:4001"
+    restart: unless-stopped

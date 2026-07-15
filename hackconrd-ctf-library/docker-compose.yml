@@ -1,0 +1,11 @@
+# CTF HackConRD — biblioteca /book (lectura restringida)
+version: "2"
+
+services:
+
+  web:
+    build: .
+    image: hackconrd-library
+    restart: always
+    ports:
+      - "5014:5014"

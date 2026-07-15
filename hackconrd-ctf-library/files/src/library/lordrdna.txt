@@ -1,0 +1,14 @@
+
+El Formato PE (Portable Executable), es un formato de archivos ejecutables, bibliotecas DLL, archivos de objetos, entre otros, utilizados por los Sistemas Operativos Windows, en sus versiones de 32 y 64 bits. En sí, estos archivos son una estructura de datos que contiene la información necesaria para ser cargados por el PE Loader del Sistema Operativo y hacerle la vida más fácil al mismo.
+Consideremos como funciona CreateProcess, este es el proceso para archivos ejecutables con excepción de las DLL, las cuales se cargan vía LoadLibrary. El procedimiento para iniciar un proceso es el siguiente:
+Se convierten y validan todos los parámetros y flags recibidos por CreateProcess
+
+Se lee el ejecutable y se cargan todas las secciones, el tamaño de las mismas, así como la posición relativa desde la dirección base (Veremos esto más adelante).
+Se crea el Windows Process Object. En este punto se crea el EProcess, el KProcess y el PEB del proceso en cuestión (Para más información Windows Internals.).
+Se crea el Thread Inicial, así como el stack y su contexto (Para más información Windows Internals).
+
+Se realiza el proceso de inicialización para el timo de Subsistema Windows que vaya a ser utilizado, enviando a este la información necesaria, como el MANIFEST del archivo a ejecutar, el ID del proceso que crea el mismo o el manejador del proceso y los threads.
+Se inicia la ejecución del Thread Inicial, para dar inicio al nuevo proceso. Este es el punto afectado por flag CREATE_SUSPENDED.
+Inicialización del nuevo proceso desde el Entry Point, valor contenido dentro del PE Header.
+
+[+] Info : https://lordrna.com/2020/formato-PE-para-dembowseros/

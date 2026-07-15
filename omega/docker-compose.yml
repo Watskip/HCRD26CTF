@@ -1,0 +1,9 @@
+# CTF Omega
+services:
+
+  web:
+    build: .
+    image: omega
+    restart: always
+    ports:
+      - "5003:5003"

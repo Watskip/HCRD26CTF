@@ -1,0 +1,8 @@
+
+services:
+  hackconrd-ctf-runner:
+    build: .
+    image: hackconrd-ctf-runner
+    restart: always
+    ports:
+      - "8023:8023"

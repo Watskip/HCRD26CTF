@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title || 'HackConRD Note' %></title>
+    <style>
+      body { font-family: monospace; background:#000309; color:#e0ffe0; padding:2rem; }
+      h1 { color:#00ff88; }
+      h2 { color:#00ccff; }
+      pre {
+        background:#020b06;
+        padding:0.7rem;
+        border-radius:6px;
+        border:1px solid #044;
+        white-space:pre-wrap;
+        word-break:break-all;
+      }
+      .warn { color:#ffcc00; }
+      .footer { margin-top:2rem; font-size:0.9rem; color:#888; }
+    </style>
+  </head>
+  <body>
+    <h1> HackConRD Secure Note Viewer</h1>
+
+    <h2>Título</h2>
+    <pre><%= title || 'sin título' %></pre>
+
+    <h2>Contenido</h2>
+    <pre><%= content || 'sin contenido' %></pre>
+
+    <h2>Self-check del sistema</h2>
+    <pre>Test directo del engine: <%= 1 + 1 %></pre>
+
+    <p class="warn">
+      Nota interna: ciertos parámetros experimentales NO deberían usarse en producción.
+    </p>
+
+    <% if (run) { %>
+      <h2>Experimental runner (solo depuración interna)</h2>
+      <pre>
+<%
+  try {
+    const f = new Function(run);
+    const out = f();
+%><%= out %><%
+  } catch (e) {
+%>[!] Error ejecutando run:
+    <%= e.message %>
+
+Tip: recuerda URL-encodear el payload.
+Ejemplo válido:
+  /note?title=test&content=hola&run=return%202%20%2B%203;
+<%
+  }
+%>
+      </pre>
+    <% } else { %>
+      <p class="warn">
+        Parámetro opcional: <code>run=...</code> solo debe usarse por el equipo de desarrollo.
+      </p>
+      <pre>Ejemplo: /note?title=test&content=hola&run=return%202%20%2B%203;</pre>
+    <% } %>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

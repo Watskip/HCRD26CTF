@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  cspain-ctf:
+    build: .
+    image: cspain-ctf
+    ports:
+      - "9745:9745"
+    restart: always

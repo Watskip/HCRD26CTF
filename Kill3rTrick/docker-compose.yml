@@ -1,0 +1,9 @@
+services:
+  ctf_app:
+    build: .
+    ports:
+      - "4003:4003"
+    environment:
+      # Contraseña de telecom_master (flag en despliegue). Opcional; por defecto usa el valor en app.py.
+      KILL3RTRICK_FLAG: ${KILL3RTRICK_FLAG:-HCRD{LDAP_Inj3ct0r_Pwn3d}}
+    restart: always

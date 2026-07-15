@@ -1,0 +1,11 @@
+# CTF NextJS
+version: "2"
+
+services:
+
+  web:
+    build: .
+    image: nextjs_ctf_fixed
+    restart: always
+    ports:
+      - "5013:5013"

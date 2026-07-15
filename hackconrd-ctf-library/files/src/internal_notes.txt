@@ -1,0 +1,9 @@
+ToonS — notas internas (NO enlazar desde la biblioteca pública)
+
+1) Panel de empleados: GET /login
+   Usuario: G4l1l30
+   Contraseña: hackconrdrocks
+
+2) Consola interna t00nsAdmin (solo con sesión de empleado): GET /t00nsAdmin
+   Operador: admin
+   La clave la guardaron como MD5 en otro ticket: 5f4dcc3b5aa765d61d8327deb882cf99

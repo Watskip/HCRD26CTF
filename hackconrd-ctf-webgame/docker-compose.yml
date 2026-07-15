@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  webgame:
+    build: .
+    image: hackconrd-webgame
+    restart: always
+    ports:
+      - "80:80"

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Omega — Panel{% endblock %}
+{% block body %}
+<div class="omega-dash">
+  <header class="omega-dash-header">
+    <div>
+      <h1>Hola, {{ username }}</h1>
+      <p class="omega-role">Sesión activa</p>
+    </div>
+    <span class="omega-badge {% if role == 'admin' %}omega-badge--admin{% endif %}">{{ role }}</span>
+  </header>
+
+  {% if role == 'admin' %}
+  <section class="omega-panel">
+    <h2>Panel administrativo</h2>
+    <p class="omega-flag">{{ flag }}</p>
+  </section>
+  {% else %}
+  <section class="omega-panel">
+    <h2>Acceso restringido</h2>
+    <p>No tienes permisos de administrador para ver el contenido sensible.</p>
+  </section>
+  {% endif %}
+
+  <p><a class="omega-link omega-logout" href="/logout">Cerrar sesión</a></p>
+</div>
+{% endblock %}

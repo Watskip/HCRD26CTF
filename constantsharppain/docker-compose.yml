@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    image: constantsharppain_ctf
+    restart: always
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    dns_opt:
+      - timeout:2
+      - attempts:3
+    ports:
+      - "4020:4020"
+    environment:
+      - FLAG=HCRD{CSP_k1ll3r_d4mn}
+    networks:
+      default:
+      internet:
+
+networks:
+  internet:
+    driver: bridge

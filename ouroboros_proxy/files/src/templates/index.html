@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Ouroboros Proxy Legacy</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+    <center>
+        <h1>Ouroboros Secure Proxy</h1>
+        <i>Hide your IP address and take back control of your privacy!</i>
+    </center>
+    <hr>
+    
+    {% if error %}
+        <font color="red"><b>[!] {{ error }}</b></font><br><br>
+    {% endif %}
+
+    <form action="/" method="post">
+        Target URL: <input type="text" name="url" size="50">
+        <input type="submit" value="Fetch URL">
+    </form>
+    
+    <hr>
+    <small>Challenge logic by uv3doble</small>
+    <br><br>
+
+    {% if result %}
+        <h3>Response Output:</h3>
+        <table border="1" cellpadding="10" width="100%">
+            <tr>
+                <td>
+                    <pre>{{ result }}</pre>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexus Lab — XML Identity Gateway</title>
+  <style>
+    :root {
+      --bg-deep: #06080c;
+      --bg-panel: #0c1018;
+      --bg-elevated: #121826;
+      --border: #1e2a3d;
+      --text: #e6edf5;
+      --muted: #7a8aa0;
+      --accent: #2ee6c8;
+      --accent-dim: rgba(46, 230, 200, 0.15);
+      --warn: #f0b429;
+      --error: #ff6b6b;
+      --grid: rgba(46, 230, 200, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: system-ui, "Segoe UI", sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text);
+      line-height: 1.5;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .brand span {
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .panel-head code {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .panel-body {
+      padding: 1.5rem 1.25rem 1.75rem;
+    }
+
+    .panel-body p.lead {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.9375rem;
+    }
+
+    label,
+    p.out-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    p.out-label {
+      margin-top: 1.75rem;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 0.9375rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    button {
+      font-family: system-ui, "Segoe UI", sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.25rem;
+      background: linear-gradient(180deg, rgba(46, 230, 200, 0.2), rgba(46, 230, 200, 0.08));
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    button:hover {
+      background: linear-gradient(180deg, rgba(46, 230, 200, 0.3), rgba(46, 230, 200, 0.12));
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    pre#responseOutput {
+      margin: 0;
+      min-height: 5.5rem;
+      padding: 1rem 1.1rem;
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--warn);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    pre#responseOutput.ready {
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Nexus Lab</h1>
+        <span>XML identity gateway</span>
+      </div>
+      <div class="status-row">
+        <span class="pulse" aria-hidden="true"></span>
+        <span>Gateway online — POST <code style="color: var(--accent);">application/xml</code> to <code style="color: var(--accent);">/system/verify_id</code></span>
+      </div>
+    </header>
+
+    <section class="panel" aria-labelledby="verify-title">
+      <div class="panel-head">
+        <span id="verify-title">Session</span>
+        <code>LAB-NXE-01</code>
+      </div>
+      <div class="panel-body">
+        <p class="lead">
+          Submit an employee identifier for XML-backed verification.</p>
+
+        <label for="empId">Employee ID (XML text node)</label>
+        <div class="field-row">
+          <input type="text" id="empId" value="102030" autocomplete="off" spellcheck="false">
+          <button type="button" onclick="sendXML()">Verify</button>
+        </div>
+
+        <p class="out-label" id="gateway-out-label">Gateway response</p>
+        <pre id="responseOutput" class="ready" role="status" aria-live="polite" aria-labelledby="gateway-out-label">Awaiting request…</pre>
+      </div>
+    </section>
+
+    <footer>
+      Nexus Lab · internal exercise · 
+    </footer>
+  </div>
+
+  <script>
+    function sendXML() {
+      var id = document.getElementById('empId').value;
+      var out = document.getElementById('responseOutput');
+      out.classList.remove('ready');
+      out.innerText = 'POSTing XML payload…';
+
+      var xml = '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<query><employeeId>' + id + '</employeeId></query>';
+
+      fetch('/system/verify_id', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/xml' },
+        body: xml
+      })
+        .then(function (res) { return res.text(); })
+        .then(function (txt) {
+          out.innerText = txt;
+          out.style.color = '';
+          if (/^HTTP\s(400|500)/.test(txt)) {
+            out.style.color = 'var(--error)';
+          } else if (/^Verified —/.test(txt)) {
+            out.style.color = 'var(--accent)';
+          } else {
+            out.style.color = 'var(--warn)';
+          }
+        })
+        .catch(function () {
+          out.innerText = 'Connection failed.';
+          out.style.color = 'var(--error)';
+        });
+    }
+  </script>
+</body>
+</html>

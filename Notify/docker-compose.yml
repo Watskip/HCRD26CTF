@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    image: notify_ctf
+    restart: always
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    dns_opt:
+      - timeout:2
+      - attempts:3
+    ports:
+      - "4016:4016"
